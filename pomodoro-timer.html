@@ -1,0 +1,9 @@
+<div class="container	text-center"><img2 src="assets/img/pomodoro.png" alt="Timer"/>
+    <countdown [seconds]="15" (complete)="onCountdownCompleted()" #counter></countdown>
+    <p>
+        <button class="btn	btn-default" (click)="counter.seconds	=	12">Reset counter</button>
+    </p>
+    <p *ngIf="counter.seconds	<	10"> Beware! Only <strong>{{ counter.seconds }} seconds</strong> left. </p>
+    <p	*ngIf="counter.seconds	===	0">Time	up!</p>
+
+</div>

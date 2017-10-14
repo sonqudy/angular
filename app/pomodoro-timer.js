@@ -10,7 +10,7 @@ System.register(["@angular/core", "@angular/platform-browser", "@angular/platfor
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var __moduleName = context_1 && context_1.id;
-    var core_1, platform_browser_1, platform_browser_dynamic_1, PomodoroTimerComponent, PomodoroTimerAppModule;
+    var core_1, platform_browser_1, platform_browser_dynamic_1, CountdownComponent, PomodoroTimerComponent, PomodoroTimerAppModule;
     return {
         setters: [
             function (core_1_1) {
@@ -24,50 +24,63 @@ System.register(["@angular/core", "@angular/platform-browser", "@angular/platfor
             }
         ],
         execute: function () {
-            PomodoroTimerComponent = (function () {
-                function PomodoroTimerComponent() {
+            CountdownComponent = /** @class */ (function () {
+                function CountdownComponent() {
                     var _this = this;
-                    this.resetPomodoro();
-                    setInterval(function () { return _this.tick(); }, 1000);
+                    this.complete = new core_1.EventEmitter();
+                    this.progress = new core_1.EventEmitter();
+                    this.intervalId = setInterval(function () { return _this.tick(); }, 1000);
                 }
-                PomodoroTimerComponent.prototype.resetPomodoro = function () {
-                    this.minutes = 24;
-                    this.seconds = 59;
-                    this.buttonLabel = 'Start';
-                    this.togglePause();
-                };
-                PomodoroTimerComponent.prototype.togglePause = function () {
-                    this.isPaused = !this.isPaused;
-                    if (this.minutes < 24 || this.seconds < 59) {
-                        this.buttonLabel = this.isPaused ? 'Resume' : 'Pause';
+                CountdownComponent.prototype.tick = function () {
+                    if (--this.seconds < 1) {
+                        clearInterval(this.intervalId);
+                        this.complete.emit(null);
                     }
+                    this.progress.emit(this.seconds);
                 };
-                PomodoroTimerComponent.prototype.tick = function () {
-                    if (!this.isPaused) {
-                        this.buttonLabel = 'Pause';
-                        if (--this.seconds < 0) {
-                            this.seconds = 59;
-                            if (--this.minutes < 0) {
-                                this.resetPomodoro();
-                            }
-                        }
-                    }
+                __decorate([
+                    core_1.Input(),
+                    __metadata("design:type", Number)
+                ], CountdownComponent.prototype, "seconds", void 0);
+                __decorate([
+                    core_1.Output(),
+                    __metadata("design:type", core_1.EventEmitter)
+                ], CountdownComponent.prototype, "complete", void 0);
+                __decorate([
+                    core_1.Output(),
+                    __metadata("design:type", core_1.EventEmitter)
+                ], CountdownComponent.prototype, "progress", void 0);
+                CountdownComponent = __decorate([
+                    core_1.Component({
+                        selector: 'countdown',
+                        template: '<h1>Time	left: {{seconds}}</h1>',
+                        styles: ['h1	{	color:	#900	}'],
+                        encapsulation: core_1.ViewEncapsulation.Emulated
+                    }),
+                    __metadata("design:paramtypes", [])
+                ], CountdownComponent);
+                return CountdownComponent;
+            }());
+            PomodoroTimerComponent = /** @class */ (function () {
+                function PomodoroTimerComponent() {
+                }
+                PomodoroTimerComponent.prototype.onCountdownCompleted = function () {
+                    //alert('Time up!');
                 };
                 PomodoroTimerComponent = __decorate([
                     core_1.Component({
                         selector: 'pomodoro-timer',
-                        template: "\n        <div class=\"text-center\"><img src=\"assets/img/pomodoro.png\" alt=\"Pomodoro\">\n            <h1> {{ minutes }}:{{ seconds | number:    '2.0' }} </h1>\n            <p>\n                <button (click)=\"togglePause()\" class=\"btn\tbtn-danger\"> {{ buttonLabel }}</button>\n            </p>\n        </div>\n    "
-                    }),
-                    __metadata("design:paramtypes", [])
+                        templateUrl: './pomodoro-timer.html'
+                    })
                 ], PomodoroTimerComponent);
                 return PomodoroTimerComponent;
             }());
-            PomodoroTimerAppModule = (function () {
+            PomodoroTimerAppModule = /** @class */ (function () {
                 function PomodoroTimerAppModule() {
                 }
                 PomodoroTimerAppModule = __decorate([
                     core_1.NgModule({
-                        declarations: [PomodoroTimerComponent],
+                        declarations: [PomodoroTimerComponent, CountdownComponent],
                         imports: [platform_browser_1.BrowserModule],
                         bootstrap: [PomodoroTimerComponent],
                     })
