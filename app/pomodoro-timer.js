@@ -24,7 +24,7 @@ System.register(["@angular/core", "@angular/platform-browser", "@angular/platfor
             }
         ],
         execute: function () {
-            CountdownComponent = /** @class */ (function () {
+            CountdownComponent = (function () {
                 function CountdownComponent() {
                     var _this = this;
                     this.complete = new core_1.EventEmitter();
@@ -61,7 +61,7 @@ System.register(["@angular/core", "@angular/platform-browser", "@angular/platfor
                 ], CountdownComponent);
                 return CountdownComponent;
             }());
-            PomodoroTimerComponent = /** @class */ (function () {
+            PomodoroTimerComponent = (function () {
                 function PomodoroTimerComponent() {
                 }
                 PomodoroTimerComponent.prototype.onCountdownCompleted = function () {
@@ -75,7 +75,7 @@ System.register(["@angular/core", "@angular/platform-browser", "@angular/platfor
                 ], PomodoroTimerComponent);
                 return PomodoroTimerComponent;
             }());
-            PomodoroTimerAppModule = /** @class */ (function () {
+            PomodoroTimerAppModule = (function () {
                 function PomodoroTimerAppModule() {
                 }
                 PomodoroTimerAppModule = __decorate([

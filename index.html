@@ -13,18 +13,20 @@
     <script src="node_modules/rxjs/bundles/Rx.js"></script>
     <script src="systemjs.config.js"></script>
     <script>
-        System.import('app/pomodoro-timer.js')
+        System.import('app/pomodoro-tasks.js')
             .then(null, console.error.bind(console));
     </script>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-static-top">
+
+<nav class="navbar	navbar-default	navbar-static-top">
     <div class="container">
-        <div class="navbar-header"><strong class="navbar-brand">Angular 2 Timer</strong>
+        <div class="navbar-header">
+            <strong class="navbar-brand">My Pomodoro Tasks</strong>
         </div>
     </div>
 </nav>
-<pomodoro-timer></pomodoro-timer>
+<pomodoro-tasks></pomodoro-tasks>
 
 </body>
 </html>

@@ -24,7 +24,7 @@ System.register(["@angular/core", "@angular/platform-browser", "@angular/platfor
             }
         ],
         execute: function () {
-            HelloWorld = /** @class */ (function () {
+            HelloWorld = (function () {
                 function HelloWorld() {
                     this.greeting = 'Hello	Angular	2!';
                 }
@@ -37,7 +37,7 @@ System.register(["@angular/core", "@angular/platform-browser", "@angular/platfor
                 ], HelloWorld);
                 return HelloWorld;
             }());
-            HelloWorldAppModule = /** @class */ (function () {
+            HelloWorldAppModule = (function () {
                 function HelloWorldAppModule() {
                 }
                 HelloWorldAppModule = __decorate([
