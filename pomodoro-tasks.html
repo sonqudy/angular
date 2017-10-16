@@ -1,13 +1,13 @@
-<div class="container	text-center"><img src="assets/img/pomodoro.png" alt="Pomodoro"/>
+<div class="container	text-center"><img src="assets/img/pomodoro2.png" alt="Pomodoro"/>
     <div><h3> {{ queuedPomodoros | i18nPlural:queueHeaderMapping }} for today
-        <span class="small" *ngIf="queuedPomodoros>0">(Estimated time: {{queuedPomodoros*25}})</span>
+        <span class="small"
+              *ngIf="queuedPomodoros>0">(Estimated time: {{queuedPomodoros*25 | pomodoroFormattedTime}})</span>
     </h3>
-        <p><span *ngFor="let queuedTask	of	tasks">
-            <pomodoro-task-icons [task]="queuedTask" (mouseover)="tooltip.innerText	= queuedTask.name"
-                (mouseout)="tooltip.innerText='Mouseover for details'"></pomodoro-task-icons>
+        <p><span *ngFor="let queuedTask	of tasks | pomodoroQueuedOnly: true">
+            <pomodoro-task-icons [task]="queuedTask" [taskTooltip]="tooltip" size="30"></pomodoro-task-icons>
         </span>
         </p>
-        <p #tooltip *ngIf="queuedPomodoros>0">Mouseover for details</p>
+        <p #tooltip>Mouseover for details</p>
     </div>
     <h4>Tasks backlog</h4>
     <table class="table">
@@ -21,13 +21,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let	task	of	tasks;	let	i	=	index">
+        <tr *ngFor="let	task of tasks;	let	i = index">
             <th scope="row">{{i}}
                 <span *ngIf="task.queued" class="label label-info">Queued</span>
             </th>
             <td>{{task.name | slice: 0:35 }} <span [hidden]="task.name.length	<	35">...</span></td>
             <td>{{task.deadline | date: 'fullDate' }}
-                <span *ngIf="task.deadline < today" class="label	label-danger">Due</span>
+                <span *ngIf="task.deadline < today" class="label label-danger">Due</span>
             </td>
             <td class="text-center">{{task.pomodorosRequired}}</td>
             <td>

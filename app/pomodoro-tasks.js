@@ -10,7 +10,7 @@ System.register(["@angular/core", "@angular/common", "@angular/platform-browser"
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var __moduleName = context_1 && context_1.id;
-    var core_1, common_1, platform_browser_1, platform_browser_dynamic_1, TasksService, TaskIconsComponent, TasksComponent, AppModule;
+    var core_1, common_1, platform_browser_1, platform_browser_dynamic_1, TasksService, TaskIconsComponent, FormattedTimePipe, QueuedOnlyPipe, TaskTooltipDirective, TasksComponent, AppModule;
     return {
         setters: [
             function (core_1_1) {
@@ -73,10 +73,86 @@ System.register(["@angular/core", "@angular/common", "@angular/platform-browser"
                 TaskIconsComponent = __decorate([
                     core_1.Component({
                         selector: 'pomodoro-task-icons',
-                        template: "<img *ngFor=\"let\ticon\tof\ticons\" src=\"/assets/img/pomodoro.png\" width=\"50\">"
+                        template: "<img *ngFor=\"let\ticon of\ticons\" src=\"/assets/img/task.svg\" width=\"30\">"
                     })
                 ], TaskIconsComponent);
                 return TaskIconsComponent;
+            }());
+            FormattedTimePipe = (function () {
+                function FormattedTimePipe() {
+                }
+                FormattedTimePipe.prototype.transform = function (totalMinutes) {
+                    var minutes = totalMinutes % 60;
+                    var hours = Math.floor(totalMinutes / 60);
+                    return hours + "h:" + minutes + "m";
+                };
+                FormattedTimePipe = __decorate([
+                    core_1.Pipe({
+                        name: 'pomodoroFormattedTime'
+                    })
+                ], FormattedTimePipe);
+                return FormattedTimePipe;
+            }());
+            QueuedOnlyPipe = (function () {
+                function QueuedOnlyPipe() {
+                }
+                QueuedOnlyPipe.prototype.transform = function (tasks) {
+                    var args = [];
+                    for (var _i = 1; _i < arguments.length; _i++) {
+                        args[_i - 1] = arguments[_i];
+                    }
+                    return tasks.filter(function (task) {
+                        return task.queued === args[0];
+                    });
+                };
+                QueuedOnlyPipe = __decorate([
+                    core_1.Pipe({
+                        name: 'pomodoroQueuedOnly',
+                        pure: false
+                    })
+                ], QueuedOnlyPipe);
+                return QueuedOnlyPipe;
+            }());
+            TaskTooltipDirective = (function () {
+                function TaskTooltipDirective() {
+                }
+                TaskTooltipDirective.prototype.onMouseOver = function () {
+                    if (!this.defaultTooltipText && this.taskTooltip) {
+                        this.defaultTooltipText = this.taskTooltip.innerText;
+                    }
+                    this.taskTooltip.innerText = this.task.name;
+                };
+                TaskTooltipDirective.prototype.onMouseOut = function () {
+                    if (this.taskTooltip) {
+                        this.taskTooltip.innerText = this.defaultTooltipText;
+                    }
+                };
+                __decorate([
+                    core_1.Input(),
+                    __metadata("design:type", Object)
+                ], TaskTooltipDirective.prototype, "task", void 0);
+                __decorate([
+                    core_1.Input(),
+                    __metadata("design:type", Object)
+                ], TaskTooltipDirective.prototype, "taskTooltip", void 0);
+                __decorate([
+                    core_1.HostListener('mouseover'),
+                    __metadata("design:type", Function),
+                    __metadata("design:paramtypes", []),
+                    __metadata("design:returntype", void 0)
+                ], TaskTooltipDirective.prototype, "onMouseOver", null);
+                __decorate([
+                    core_1.HostListener('mouseout'),
+                    __metadata("design:type", Function),
+                    __metadata("design:paramtypes", []),
+                    __metadata("design:returntype", void 0)
+                ], TaskTooltipDirective.prototype, "onMouseOut", null);
+                TaskTooltipDirective = __decorate([
+                    core_1.Directive({
+                        selector: '[task]'
+                    })
+                ], TaskTooltipDirective);
+                return TaskTooltipDirective;
             }());
             TasksComponent = (function () {
                 function TasksComponent() {
@@ -99,7 +175,7 @@ System.register(["@angular/core", "@angular/common", "@angular/platform-browser"
                 TasksComponent = __decorate([
                     core_1.Component({
                         selector: 'pomodoro-tasks',
-                        entryComponents: [TaskIconsComponent],
+                        // entryComponents: [TaskIconsComponent],
                         styleUrls: ['pomodoro-tasks.css'],
                         templateUrl: 'pomodoro-tasks.html',
                     }),
@@ -112,7 +188,7 @@ System.register(["@angular/core", "@angular/common", "@angular/platform-browser"
                 }
                 AppModule = __decorate([
                     core_1.NgModule({
-                        declarations: [TasksComponent, TaskIconsComponent],
+                        declarations: [TasksComponent, TaskIconsComponent, TaskTooltipDirective, FormattedTimePipe, QueuedOnlyPipe],
                         imports: [common_1.CommonModule, platform_browser_1.BrowserModule],
                         bootstrap: [TasksComponent],
                     })

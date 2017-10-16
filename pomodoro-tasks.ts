@@ -44,7 +44,7 @@ class TasksService {
 
 @Component({
     selector: 'pomodoro-task-icons',
-    template: `<img *ngFor="let	icon	of	icons" src="/assets/img/pomodoro.png" width="50">`
+    template: `<img *ngFor="let	icon of	icons" src="/assets/img/task.svg" width="30">`
 })
 class TaskIconsComponent implements OnInit {
     @Input() task: Task;
@@ -57,9 +57,56 @@ class TaskIconsComponent implements OnInit {
 }
 
 
+@Pipe({
+    name: 'pomodoroFormattedTime'
+})
+class FormattedTimePipe implements PipeTransform {
+    transform(totalMinutes: number): string {
+        let minutes: number = totalMinutes % 60;
+        let hours: number = Math.floor(totalMinutes / 60);
+        return `${hours}h:${minutes}m`;
+    }
+}
+
+@Pipe({
+    name: 'pomodoroQueuedOnly',
+    pure: false
+})
+class QueuedOnlyPipe implements PipeTransform {
+    transform(tasks: Task[], ...args: any[]): Task[] {
+        return tasks.filter((task: Task) => {
+            return task.queued === args[0];
+        });
+    }
+}
+
+@Directive({
+    selector: '[task]'
+})
+class TaskTooltipDirective {
+    private defaultTooltipText: string;
+    @Input() task: Task;
+    @Input() taskTooltip: any;
+
+    @HostListener('mouseover')
+    onMouseOver() {
+        if (!this.defaultTooltipText && this.taskTooltip) {
+            this.defaultTooltipText = this.taskTooltip.innerText;
+        }
+        this.taskTooltip.innerText = this.task.name;
+    }
+
+    @HostListener('mouseout')
+    onMouseOut() {
+        if (this.taskTooltip) {
+            this.taskTooltip.innerText = this.defaultTooltipText;
+        }
+    }
+}
+
 @Component({
     selector: 'pomodoro-tasks',
-    entryComponents: [TaskIconsComponent],
+    // entryComponents: [TaskIconsComponent],
     styleUrls: ['pomodoro-tasks.css'],
     templateUrl: 'pomodoro-tasks.html',
 
@@ -68,7 +115,7 @@ class TasksComponent {
     today: Date;
     tasks: Task[];
     queuedPomodoros: number;
-    queueHeaderMapping: any = {'=0': 'No	pomodoros', '=1': 'One	pomodoro', 'other': '#	pomodoros'}
+    queueHeaderMapping: any = {'=0': 'No	pomodoros', '=1': 'One	pomodoro', 'other': '#	pomodoros'};
 
     constructor() {
         const taskService: TasksService = new TasksService();
@@ -91,8 +138,9 @@ class TasksComponent {
 
 }
 
+
 @NgModule({
-    declarations: [TasksComponent, TaskIconsComponent],
+    declarations: [TasksComponent, TaskIconsComponent, TaskTooltipDirective, FormattedTimePipe, QueuedOnlyPipe],
     imports: [CommonModule, BrowserModule],
     bootstrap: [TasksComponent],
 })
