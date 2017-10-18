@@ -4,12 +4,16 @@ import {Config} from './config.service';
 import {PanelComponent} from "./container";
 import {Mock} from './mock'
 import {Person} from './model'
+import {User} from './model'
+import {UserService} from './service'
 
 @Component({
     selector: 'my-app',
-    entryComponents: [PanelComponent],
+    providers: [UserService],
     templateUrl: 'app/app.component.html',
 })
+
+
 export class AppComponent {
     title: string;
     user: Person;
@@ -17,11 +21,10 @@ export class AppComponent {
 
     submitted: boolean = false;
 
-    constructor(_config: Config, _mock: Mock, private _http: Http) {
+    constructor(_config: Config, _mock: Mock, userService:UserService) {
         this.title = _config.TITLE_PAGE;
         this.user = _mock.mike;
-        _http.get("../app/users.json")
-            .map(res => res.json())
+        userService.getUsers()
             .subscribe(users => this.users = users);
     }
 
