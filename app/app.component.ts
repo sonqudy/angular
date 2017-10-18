@@ -1,19 +1,37 @@
 import {Component} from '@angular/core';
-import {SHARED_PROVIDERS} from './shared/shared';
+import {Config} from './config.service';
+import {Video} from './video'
+import {VideoListComponent} from './videolist.component'
 
 @Component({
-    selector: 'pomodoro-app',
-    // directives: [TIMER_DIRECTIVES, TASKS_DIRECTIVES],
-    providers: [SHARED_PROVIDERS],
-    template: `
-        <nav class="navbar	navbar-default	navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <strong class="navbar-brand">My Pomodoro App</strong></div>
-            </div>
-        </nav>
-        <pomodoro-timer-widget></pomodoro-timer-widget>
-        <pomodoro-tasks></pomodoro-tasks>                `
+    selector: 'video-app',
+    templateUrl: 'app/app.component.html',
+
 })
-export default class AppComponent {
+export class AppComponent {
+    title: string = Config.TITLE_PAGE;
+    videos: Array<Video>;
+    selectedVideo?: Video;
+
+    constructor(){
+        this.videos = [
+            new Video(1,"Test","www.test.com","Test Description"),
+            new Video(2,"Test 2","www.test2.com")
+        ]
+    }
+    onSelectVideo(video){
+        this.selectedVideo = video;
+    }
+
+    onCloseDetailForm(event){
+        this.selectedVideo = undefined;
+    }
+
+    newVideo(){
+        var v : Video = new Video(this.videos.length+1,"A new video");
+        this.videos.push(v);
+        this.selectedVideo = v;
+    }
+
+
 }
