@@ -4,9 +4,18 @@
         'rxjs': 'node_modules/rxjs'
 
     };
-    var packages = ['@angular/common', '@angular/compiler', '@angular/core', '@angular/http', '@angular/platform-browser', '@angular/platform-browser-dynamic', '@angular/router', '@angular/testing', 'rxjs', 'app'];
+    var packages = ['@angular/common',
+        '@angular/compiler',
+        '@angular/core',
+        '@angular/http',
+        '@angular/platform-browser',
+        '@angular/platform-browser-dynamic',
+        '@angular/router',
+        '@angular/testing',
+        'rxjs',
+        'dist'];
     var packagesConfig = {
-        app: {
+        dist: {
             main: 'index.js',
             defaultExtension: 'js'
         },
@@ -25,7 +34,7 @@
         // map tells the System loader where to look for things
         map: {
             // our app is within the app folder
-            app: 'app',
+            app: 'dist',
 
             // angular bundles
             '@angular/core': 'npm:@angular/core/bundles/core.umd.js',

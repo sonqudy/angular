@@ -1,36 +1,33 @@
 import {Component} from '@angular/core';
+import {Http} from '@angular/http';
 import {Config} from './config.service';
-import {Video} from './video'
-import {VideoListComponent} from './videolist.component'
+import {PanelComponent} from "./container";
+import {Mock} from './mock'
+import {Person} from './model'
 
 @Component({
-    selector: 'video-app',
+    selector: 'my-app',
+    entryComponents: [PanelComponent],
     templateUrl: 'app/app.component.html',
-
 })
 export class AppComponent {
-    title: string = Config.TITLE_PAGE;
-    videos: Array<Video>;
-    selectedVideo?: Video;
+    title: string;
+    user: Person;
+    users:Array<any>;
 
-    constructor(){
-        this.videos = [
-            new Video(1,"Test","www.test.com","Test Description"),
-            new Video(2,"Test 2","www.test2.com")
-        ]
-    }
-    onSelectVideo(video){
-        this.selectedVideo = video;
-    }
+    submitted: boolean = false;
 
-    onCloseDetailForm(event){
-        this.selectedVideo = undefined;
+    constructor(_config: Config, _mock: Mock, private _http: Http) {
+        this.title = _config.TITLE_PAGE;
+        this.user = _mock.mike;
+        _http.get("../app/users.json")
+            .map(res => res.json())
+            .subscribe(users => this.users = users);
     }
 
-    newVideo(){
-        var v : Video = new Video(this.videos.length+1,"A new video");
-        this.videos.push(v);
-        this.selectedVideo = v;
+    onSubmit(f) {
+        this.submitted = true;
+        console.log("sending..." + JSON.stringify(this.user));
     }
 
 
